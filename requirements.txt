@@ -1,0 +1,9 @@
+flask
+pdfplumber
+python-docx
+PyPDF2
+openai
+chardet
+pywin32
+fuzzywuzzy
+python-dotenv

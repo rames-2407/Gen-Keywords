@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keyword Extraction and Comparison</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 20px;
+            background-color: #f9f9f9;
+            color: #333;
+
+        }
+    
+        h1, h2 {
+            color: #222;
+            text-align: center;
+        }
+    
+        form {
+            max-width: 600px;
+            margin: 0 auto 30px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+    
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 10px;
+            color: #444;
+        }
+    
+        input[type="file"] {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+            font-size: 16px;
+        }
+    
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background: linear-gradient(90deg, #4CAF50, #45a049);
+            color: #fff;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+    
+        button:hover {
+            background: linear-gradient(90deg, #45a049, #3e8e41);
+        }
+    
+        .error {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 10px;
+            background: #f8d7da;
+            color: #842029;
+            border: 1px solid #f5c2c7;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+    
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+    
+        ul li {
+            margin-bottom: 15px;
+            padding: 15px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+    
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px auto;
+            background: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+    
+        table th, table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+    
+        table th {
+            background: #4CAF50;
+            color: #fff;
+            font-size: 16px;
+            text-transform: uppercase;
+        }
+    
+        table tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+    
+        table tr:hover {
+            background: #f1f1f1;
+        }
+    
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+    
+            form {
+                width: 100%;
+            }
+    
+            table {
+                font-size: 14px;
+            }
+        }
+    </style>
+    
+</head>
+<body>
+    <h1>Upload Files for Keyword Extraction and Comparison</h1>
+
+    <form action="/" method="POST" enctype="multipart/form-data">
+        <label for="file1">Primary Files:</label><br>
+        <input type="file" name="file1" id="file1" required multiple><br><br>
+
+        <label for="file2">Secondary Files :</label><br>
+        <input type="file" name="file2" id="file2" required multiple><br><br>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% endif %}
+
+    {% if result %}
+        <!-- Primary File Results -->
+        <!-- <h2>Primary File: {{ result['file_1']['filename'] }}</h2>
+        <h3>Extracted Sentences and Keywords:</h3>
+        <ul>
+            {% for data in result['file_1']['data'] %}
+                <li>
+                    <strong>Sentence:</strong> {{ data['sentence'] }}<br>
+                    <strong>Primary Keywords:</strong> {{ data['primary_keywords'] | join(', ') }}<br>
+                    <strong>Secondary Keywords:</strong> {{ data['secondary_keywords'] | join(', ') }}
+                </li>
+            {% endfor %}
+        </ul> -->
+
+        <!-- Secondary Files Results -->
+        <h2>Secondary Files:</h2>
+        {% if result['file_2'] %}
+            <ul>
+                {% for file in result['file_2'] %}
+                    <li>
+                        <strong>File:</strong> {{ file['filename'] }}<br>
+                        <strong>Extracted Keywords:</strong> {{ file['keywords'] | join(', ') }}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No secondary files uploaded.</p>
+        {% endif %}
+
+        <!-- Matching Keywords Results -->
+        <h2>Matching Keywords:</h2>
+        {% if result['matching_keywords'] %}
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Keyword</th>
+                        <th>Source File</th>
+                        <th>Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for match in result['matching_keywords'] %}
+                        <tr>
+                            <td>{{ match['keyword'] }}</td>
+                            <td>{{ match['source_file'] }}</td>
+                            <td>{{ match['type'] }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No matching keywords found.</p>
+        {% endif %}
+    {% endif %}
+</body>
+</html>
